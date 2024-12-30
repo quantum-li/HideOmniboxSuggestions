@@ -5,8 +5,7 @@
     "description": "隐藏Chrome地址栏的搜索建议",
     "permissions": [
       "history",
-      "storage",
-      "webNavigation"
+      "storage"
     ],
     "background": {
       "service_worker": "background.js"
