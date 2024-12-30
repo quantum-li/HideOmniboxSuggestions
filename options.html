@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hide Omnibox Suggestions 选项</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    textarea {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    #status {
+      color: green;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>自定义 URL 前缀</h1>
+  <p>每行输入一个 URL 前缀，访问这些 URL 时的历史记录将被自动删除：</p>
+  <textarea id="customUrls" rows="10"></textarea>
+  <br>
+  <button id="save">保存</button>
+  <div id="status"></div>
+  <script src="options.js"></script>
+</body>
+</html>
