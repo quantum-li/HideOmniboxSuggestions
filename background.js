@@ -19,7 +19,7 @@ function isUrlInWhitelist(url, whitelist) {
 function cleanHistory() {
   chrome.storage.sync.get('whitelist', (data) => {
     const whitelist = data.whitelist || [];
-    chrome.history.search({text: '', maxResults: 1000}, (historyItems) => {
+    chrome.history.search({text: '', maxResults: 99999}, (historyItems) => {
       historyItems.forEach(item => {
         if (!isUrlInWhitelist(item.url, whitelist)) {
           chrome.history.deleteUrl({ url: item.url });
