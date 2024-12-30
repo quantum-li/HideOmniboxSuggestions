@@ -1,56 +1,97 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>欢迎使用 Hide Omnibox Suggestions</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h1 {
-            color: #4285f4;
-        }
-        .feature {
-            background-color: #f1f3f4;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Hide Omnibox Suggestions Options</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    h1, h2 {
+      color: #4285f4;
+    }
+    .whitelist {
+      background-color: white;
+      padding: 20px;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    #whitelistInput {
+      width: calc(100% - 120px);
+      padding: 10px;
+      margin-right: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    #addToWhitelist {
+      padding: 10px 15px;
+      background-color: #4285f4;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #addToWhitelist:hover {
+      background-color: #3367d6;
+    }
+    #whitelistItems {
+      margin-top: 20px;
+    }
+    .whitelist-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background-color: #f9f9f9;
+      margin-bottom: 5px;
+      border-radius: 4px;
+    }
+    .remove {
+      background-color: #db4437;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .remove:hover {
+      background-color: #c53929;
+    }
+    .material-icons {
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+  </style>
 </head>
 <body>
-    <h1>欢迎使用 Hide Omnibox Suggestions</h1>
-    
-    <div class="feature">
-        <h2>功能介绍</h2>
-        <p>Hide Omnibox Suggestions 是一个简单而强大的 Chrome 扩展程序,旨在提高您的浏览隐私。它通过自动清除最近的浏览历史来隐藏地址栏中的搜索建议。</p>
-    </div>
-
-    <div class="feature">
-        <h2>工作原理</h2>
-        <ul>
-            <li>它会自动清理Chrome的浏览历史。</li>
-            <li>这样可以有效防止敏感的搜索内容出现在地址栏的建议中。</li>
-            <li>扩展在后台静默工作,不会影响您的正常浏览体验。</li>
-        </ul>
-    </div>
-
-    <div class="feature">
-        <h2>使用方式</h2>
-        <p>安装完成后,扩展会自动在后台运行。您无需进行任何额外的设置或操作。只需正常使用浏览器,扩展会自动保护您的隐私。</p>
-    </div>
-
-    <div class="feature">
-        <h2>注意事项</h2>
-        <p>请注意,此扩展会删除最近的浏览历史。如果您需要保留完整的浏览历史记录,可能需要考虑是否使用此扩展。</p>
-    </div>
-
-    <p>感谢您使用 Hide Omnibox Suggestions！如果您有任何问题或建议,请随时与我们联系。</p>
+  <h1><i class="material-icons">security</i> Hide Omnibox Suggestions</h1>
+  <p>这个扩展程序可以帮助您隐藏Chrome地址栏的搜索建议，并清理非白名单网站的历史记录，提高您的浏览隐私。</p>
+  <h2><i class="material-icons">info</i> 功能介绍</h2>
+  <ul>
+    <li>自动隐藏地址栏搜索建议</li>
+    <li>支持白名单功能，允许特定网站不被清理历史记录</li>
+    <li>可以通过扩展图标快速将当前网站添加到白名单</li>
+    <li>在切换标签页时自动清理非白名单网站的历史记录</li>
+  </ul>
+  <h2><i class="material-icons">help_outline</i> 使用方式</h2>
+  <ol>
+    <li>扩展程序安装后会自动隐藏所有网站的地址栏搜索建议</li>
+    <li>如果您希望某些网站的历史记录不被清理，可以将其添加到下方的白名单中</li>
+    <li>您也可以通过点击扩展图标，快速将当前网站添加到白名单</li>
+    <li>每次切换标签页时，扩展程序会自动清理非白名单网站的历史记录</li>
+    <li>白名单支持正则表达式匹配，例如 ".*\\.example\\.com" 可以匹配所有 example.com 的子域名</li>
+  </ol>
+  <div class="whitelist">
+    <h2><i class="material-icons">list</i> 白名单设置</h2>
+    <input type="text" id="whitelistInput" placeholder="输入网址（支持正则表达式，如 .*\.example\.com）">
+    <button id="addToWhitelist"><i class="material-icons">add</i> 添加</button>
+    <div id="whitelistItems"></div>
+  </div>
+  <script src="options.js"></script>
 </body>
 </html>

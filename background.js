@@ -1,37 +1,38 @@
-// 清除所有历史记录
-function clearAllHistory() {
-  chrome.history.deleteAll(() => {
-    if (chrome.runtime.lastError) {
-      console.error('Error deleting all history:', chrome.runtime.lastError);
-    } else {
-      console.log('All history cleared');
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason === 'install') {
+    chrome.tabs.create({ url: 'options.html' });
+  }
+});
+
+function isUrlInWhitelist(url, whitelist) {
+  return whitelist.some(pattern => {
+    try {
+      const regex = new RegExp(pattern);
+      return regex.test(url);
+    } catch (e) {
+      console.error('无效的正则表达式模式:', pattern);
+      return false;
     }
   });
 }
 
-let newTabCreated = false;
+function cleanHistory() {
+  chrome.storage.sync.get('whitelist', (data) => {
+    const whitelist = data.whitelist || [];
+    chrome.history.search({text: '', maxResults: 1000}, (historyItems) => {
+      historyItems.forEach(item => {
+        if (!isUrlInWhitelist(item.url, whitelist)) {
+          chrome.history.deleteUrl({ url: item.url });
+        }
+      });
+    });
+  });
+}
 
-// 监听新标签页创建事件
-chrome.tabs.onCreated.addListener((tab) => {
-  console.log('New tab created');
-  newTabCreated = true;
-});
+chrome.tabs.onActivated.addListener(cleanHistory);
 
-// 监听标签页激活事件
-chrome.tabs.onActivated.addListener((activeInfo) => {
-  console.log('Tab activated:', activeInfo.tabId);
-  if (newTabCreated) {
-    clearAllHistory();
-    newTabCreated = false;
-  }
-});
-
-// 监听扩展安装事件
-chrome.runtime.onInstalled.addListener((details) => {
-  if (details.reason === 'install') {
-    console.log('Extension installed, clearing all history');
-    clearAllHistory();
-    // 打开欢迎页面
-    chrome.tabs.create({ url: 'options.html' });
+chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+  if (changeInfo.status === 'complete') {
+    cleanHistory();
   }
 });

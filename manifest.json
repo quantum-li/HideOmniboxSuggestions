@@ -1,21 +1,31 @@
 {
-    "manifest_version": 3,
-    "name": "禁用搜索建议",
-    "version": "1.0",
-    "description": "隐藏Chrome地址栏的搜索建议",
-    "permissions": [
-      "history",
-      "storage"
-    ],
-    "background": {
-      "service_worker": "background.js"
-    },
-    "options_page": "options.html",
-    "icons": {
-      "48": "icon.png"
-    },
-    "action": {
-      "default_icon": "icon.png"
+  "manifest_version": 3,
+  "name": "禁用搜索建议",
+  "version": "1.4",
+  "description": "隐藏Chrome地址栏的搜索建议，支持白名单，并在切换标签页时清理非白名单历史记录",
+  "permissions": [
+    "storage",
+    "tabs",
+    "history"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
     }
+  ],
+  "options_page": "options.html",
+  "action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "48": "icon.png"
   }
-  
+}
