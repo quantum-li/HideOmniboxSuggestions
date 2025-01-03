@@ -16,14 +16,34 @@ function isUrlInWhitelist(url, whitelist) {
   });
 }
 
+function cleanHistoryBatch(startTime, endTime, whitelist, maxResults, callback) {
+  chrome.history.search({text: '', startTime: startTime, endTime: endTime, maxResults: maxResults}, (historyItems) => {
+    if (historyItems.length === 0) {
+      callback();
+      return;
+    }
+
+    historyItems.forEach(item => {
+      if (!isUrlInWhitelist(item.url, whitelist)) {
+        chrome.history.deleteUrl({ url: item.url });
+      }
+    });
+
+    const lastItemTime = historyItems[historyItems.length - 1].lastVisitTime;
+    cleanHistoryBatch(startTime, lastItemTime, whitelist, maxResults, callback);
+  });
+}
+
 function cleanHistory() {
-  chrome.storage.sync.get('whitelist', (data) => {
+  chrome.storage.sync.get(['whitelist', 'lastCleanTime'], (data) => {
     const whitelist = data.whitelist || [];
-    chrome.history.search({text: '', maxResults: 99999}, (historyItems) => {
-      historyItems.forEach(item => {
-        if (!isUrlInWhitelist(item.url, whitelist)) {
-          chrome.history.deleteUrl({ url: item.url });
-        }
+    const startTime = data.lastCleanTime || 0; // 从上次结束时间开始
+    const endTime = Date.now();
+    const maxResults = 1000; // 每次获取的最大记录数
+
+    cleanHistoryBatch(startTime, endTime, whitelist, maxResults, () => {
+      chrome.storage.sync.set({ lastCleanTime: endTime }, () => {
+        console.log('历史记录清理完成');
       });
     });
   });
